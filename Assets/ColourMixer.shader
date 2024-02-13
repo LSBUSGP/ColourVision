@@ -28,23 +28,17 @@ Shader "Custom/ColourMixer"
         
             // DaltonLens-Python LMSModel_sRGB_SmithPokorny75.LMS_from_linearRGB
             // Row Major
-            float3x3 LMS_from_linearRGB = float3x3(
-                1.0, 0.0, 0.0, 
-                0.0, 1.0, 0.0,
-                0.0, 0.0, 1.0
-                // 0.17882, 0.43516, 0.04119,
-                // 0.03456, 0.27155, 0.03867,
-                // 0.00030, 0.00184, 0.01467
+            static float3x3 LMS_from_linearRGB = float3x3(
+                0.17882, 0.43516, 0.04119,
+                0.03456, 0.27155, 0.03867,
+                0.00030, 0.00184, 0.01467
             );
         
             // from Wolfram Alpha (inverse of the above matrix)
-            float3x3 linearRGB_from_LMS = float3x3(
-                1, 0, 0, 
-                0, 1, 0,
-                0, 0, 1
-                // 8.09504, -13.0514, 11.6745,
-                // -1.02498, 5.40209, -11.362,
-                // -0.0369831, -0.410662, 69.3527
+            static float3x3 linearRGB_from_LMS = float3x3(
+                8.09504, -13.0514, 11.6745,
+                -1.02498, 5.40209, -11.362,
+                -0.0369831, -0.410662, 69.3527
             );
 
             // Column Major
@@ -110,9 +104,9 @@ Shader "Custom/ColourMixer"
                 //lms = applyProtanope_Vienot(lms);
                 //lms = applyDeuteranope_Vienot(lms);
                 //lms = applyTritanope_Brettel1997(lms);
-                linearCol = lms;//RGB_from_LMS(lms);
+                linearCol = RGB_from_LMS(lms);
                 sRGB.rgb = fixed3(LinearToGammaSpaceExact(linearCol.r), LinearToGammaSpaceExact(linearCol.g), LinearToGammaSpaceExact(linearCol.b));
-                return float4(mul(float3x3(1, 0, 0, 0, 1, 0, 0, 0, 1), float3(1, 1, 1)), 1);
+                return sRGB;
             }
             ENDCG
         }
