@@ -1,4 +1,4 @@
-Shader "Custom/CVDSimulator"
+Shader "Hidden/Shader/CVDSimulator"
 {
     Properties
     {
